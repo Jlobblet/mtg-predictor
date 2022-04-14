@@ -6,6 +6,8 @@ import logging
 from typing import Any, List
 
 import pandas as pd
+from nltk import PorterStemmer
+from nltk.corpus import stopwords
 
 
 def _filter_entries(card: dict) -> dict:
@@ -29,7 +31,7 @@ def _split_words(text: str) -> List[str]:
 
 def _inspect(x: Any) -> Any:
     """Log an object and then return it unchanged."""
-    logging.info(x)
+    logging.info(f"\n{x}" if isinstance(x, (pd.DataFrame, pd.Series)) else x)
     return x
 
 
@@ -47,15 +49,30 @@ def process_atomic_cards(atomic_cards: pd.DataFrame) -> pd.DataFrame:
         A pandas DataFrame containing the same data as `atomic_cards`, with a new column containing the word counts.
     """
     atomic_cards = atomic_cards.copy()
+    # Join the colour identity into a single string
     atomic_cards["colorIdentity"] = atomic_cards["colorIdentity"].apply(
         lambda x: "".join(x)
     )
+
+    # Common words to remove
+    stop_words = set(stopwords.words("english"))
+
+    # Sanitise the text
     atomic_cards["word_counts"] = (
         atomic_cards["text"]
         .str.replace(r"[.,:;\"()\[\]!?\-_]", "", regex=True)
         .str.lower()
         .str.split()
+        .dropna()  # Drop cards with no text
+        .apply(lambda x: [word for word in x if word not in stop_words])
     )
+
+    # Filter to monocolour cards
+    atomic_cards["color_counts"] = atomic_cards["colorIdentity"].str.len()
+    atomic_cards = atomic_cards[atomic_cards["color_counts"] == 1]
+    atomic_cards["colorIdentity"] = atomic_cards["colorIdentity"].str[0]
+
+    # Count the number of occurrences of each word in the text column.
     return (
         atomic_cards.explode("word_counts")
         .groupby(by=["name", "colorIdentity", "manaValue"])["word_counts"]
@@ -63,4 +80,5 @@ def process_atomic_cards(atomic_cards: pd.DataFrame) -> pd.DataFrame:
         .rename("count")
         .reset_index()
         .rename(columns={"word_counts": "word"})
+        .pipe(_inspect)
     )

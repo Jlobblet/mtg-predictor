@@ -16,7 +16,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
     ds = data_science.create_pipeline()
 
     return {
-        "__default__": dp,
+        "__default__": dp + ds,
         "data_processing": dp,
         "data_science": ds,
     }

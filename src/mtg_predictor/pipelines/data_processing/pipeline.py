@@ -5,7 +5,7 @@ generated using Kedro 0.18.0
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import preprocess_mtg_json
+from .nodes import preprocess_mtg_json, process_atomic_cards
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -18,10 +18,10 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="preprocess_mtg_json",
             ),
             node(
-                func=lambda x: x,
+                func=process_atomic_cards,
                 inputs="atomic_cards_json@pandas",
-                outputs="atomic_cards",
-                name="atomic_cards_parquet",
-            )
+                outputs="word_counts",
+                name="word_counts",
+            ),
         ]
     )

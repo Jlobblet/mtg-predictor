@@ -1,5 +1,5 @@
 import json
-from lzma import decompress, compress
+from lzma import compress, decompress
 from pathlib import Path
 from typing import Any, Dict
 

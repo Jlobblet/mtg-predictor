@@ -16,6 +16,6 @@ atomic_cards_json@pandas:
     load_args:
         orient: index
 
-atomic_cards:
+word_counts:
     type: pandas.ParquetDataSet
-    filepath: data/03_primary/AtomicCards.parquet
+    filepath: data/03_primary/word_counts.parquet

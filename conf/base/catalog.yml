@@ -1,0 +1,21 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
+mtg_json:
+    type: mtg_predictor.extras.datasets.json_xz_dataset.JsonXzDataSet
+    filepath: data/01_raw/AtomicCards.json.xz
+
+atomic_cards_json@json:
+    type: mtg_predictor.extras.datasets.json_xz_dataset.JsonXzDataSet
+    filepath: data/02_intermediate/AtomicCards.json.xz
+
+atomic_cards_json@pandas:
+    type: pandas.JSONDataSet
+    filepath: data/02_intermediate/AtomicCards.json.xz
+    load_args:
+        orient: index
+
+atomic_cards:
+    type: pandas.ParquetDataSet
+    filepath: data/03_primary/AtomicCards.parquet

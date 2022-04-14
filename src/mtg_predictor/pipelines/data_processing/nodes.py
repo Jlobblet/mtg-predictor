@@ -2,8 +2,6 @@
 This is a boilerplate pipeline 'data_processing'
 generated using Kedro 0.18.0
 """
-import pandas as pd
-
 colour_mapping = {
     "W": 1,
     "U": 2,

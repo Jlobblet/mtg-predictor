@@ -15,7 +15,7 @@ def _filter_entries(card: dict) -> dict:
     return {
         k: v
         for k, v in card.items()
-        if k in ["name", "colorIdentity", "text", "manaValue"]
+        if k == "text" or k in ["name", "colorIdentity", "manaValue", "types"]
     }
 
 
@@ -57,6 +57,9 @@ def process_atomic_cards(atomic_cards: pd.DataFrame) -> pd.DataFrame:
     # Common words to remove
     stop_words = set(stopwords.words("english"))
 
+    # Stemming
+    stemmer = PorterStemmer()
+
     # Sanitise the text
     atomic_cards["word_counts"] = (
         atomic_cards["text"]
@@ -64,18 +67,45 @@ def process_atomic_cards(atomic_cards: pd.DataFrame) -> pd.DataFrame:
         .str.lower()
         .str.split()
         .dropna()  # Drop cards with no text
-        .apply(lambda x: [word for word in x if word not in stop_words])
+        .apply(lambda x: [stemmer.stem(word) for word in x if word not in stop_words])
     )
 
-    # Filter to monocolour cards
+    # Filter to monocolour or colourless cards cards
+    atomic_cards["colorIdentity"] = atomic_cards["colorIdentity"].apply(
+        lambda c: c or "C"
+    )
     atomic_cards["color_counts"] = atomic_cards["colorIdentity"].str.len()
     atomic_cards = atomic_cards[atomic_cards["color_counts"] == 1]
     atomic_cards["colorIdentity"] = atomic_cards["colorIdentity"].str[0]
 
+    # Convert the types column to a set
+    atomic_cards["types"] = atomic_cards["types"].apply(
+        lambda ts: set(t.lower() for t in ts)
+    )
+    # Filter to types we care about
+    atomic_cards["types"] = atomic_cards["types"].apply(
+        lambda s: s
+        & {
+            "creature",
+            "instant",
+            "sorcery",
+            "enchantment",
+            "artifact",
+            "land",
+            "planeswalker",
+        }
+    )
+    # Get the first element of types
+    atomic_cards["type"] = atomic_cards["types"].apply(
+        lambda x: x.pop() if x else pd.NA
+    )
+    # Remove cards with no matching type
+    atomic_cards = atomic_cards[atomic_cards["type"].notna()]
+
     # Count the number of occurrences of each word in the text column.
     return (
         atomic_cards.explode("word_counts")
-        .groupby(by=["name", "colorIdentity", "manaValue"])["word_counts"]
+        .groupby(by=["name", "colorIdentity", "manaValue", "type"])["word_counts"]
         .value_counts()
         .rename("count")
         .reset_index()

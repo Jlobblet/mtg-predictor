@@ -19,3 +19,27 @@ atomic_cards_json@pandas:
 word_counts:
     type: pandas.ParquetDataSet
     filepath: data/03_primary/word_counts.parquet
+
+colour_identity_model:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/colour_identity_model.pickle
+
+type_model:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/type_model.pickle
+
+colour_identity_predictions:
+    type: pandas.CSVDataSet
+    filepath: data/07_model_output/colour_identity_predictions.csv
+    load_args:
+        index_col: name
+    save_args:
+        index: True
+
+type_predictions:
+    type: pandas.CSVDataSet
+    filepath: data/07_model_output/type_identity_predictions.csv
+    load_args:
+        index_col: name
+    save_args:
+        index: True

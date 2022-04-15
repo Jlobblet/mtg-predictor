@@ -3,6 +3,19 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://kedro.readthedocs.io/en/0.18.0/kedro_project_setup/configuration.html#parameters
-split_ratio:
+split:
   test_size: 0.2
-  random_state: 42
+  random_state: 621
+
+vectoriser:
+  stop_words: english
+
+selector:
+  k: 1000
+
+classifier:
+  n_estimators: 500
+  max_features: sqrt
+  min_samples_split: 2
+  n_jobs: -1
+  random_state: 621

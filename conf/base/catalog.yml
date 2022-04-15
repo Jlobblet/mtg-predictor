@@ -16,30 +16,38 @@ atomic_cards_json@pandas:
     load_args:
         orient: index
 
-word_counts:
+atomic_cards:
     type: pandas.ParquetDataSet
-    filepath: data/03_primary/word_counts.parquet
+    filepath: data/03_primary/atomic_cards.parquet
 
-colour_identity_model:
+vectoriser:
     type: pickle.PickleDataSet
-    filepath: data/06_models/colour_identity_model.pickle
+    filepath: data/05_model_input/vectoriser.pickle
 
-type_model:
+selector:
     type: pickle.PickleDataSet
-    filepath: data/06_models/type_model.pickle
+    filepath: data/05_model_input/selector.pickle
 
-colour_identity_predictions:
+classifier:
+    type: pickle.PickleDataSet
+    filepath: data/05_model_input/classifier.pickle
+
+pipeline:
+    type: pickle.PickleDataSet
+    filepath: data/05_model_input/pipeline.pickle
+
+pipeline_fitted:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/pipeline_fitted.pickle
+
+predictions:
     type: pandas.CSVDataSet
-    filepath: data/07_model_output/colour_identity_predictions.csv
+    filepath: data/07_model_output/predictions.csv
     load_args:
-        index_col: name
+        index_col: 0
     save_args:
         index: True
 
-type_predictions:
-    type: pandas.CSVDataSet
-    filepath: data/07_model_output/type_identity_predictions.csv
-    load_args:
-        index_col: name
-    save_args:
-        index: True
+confusion_matrix_display:
+    type: matplotlib.MatplotlibWriter
+    filepath: data/08_reporting/confusion_matrix_display.png

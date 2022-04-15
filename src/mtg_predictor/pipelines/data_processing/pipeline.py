@@ -20,8 +20,8 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=process_atomic_cards,
                 inputs="atomic_cards_json@pandas",
-                outputs="word_counts",
-                name="word_counts",
+                outputs="atomic_cards",
+                name="atomic_cards",
             ),
         ]
     )

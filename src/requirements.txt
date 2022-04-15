@@ -4,7 +4,7 @@ ipython>=7.31.1, <8.0
 isort~=5.0
 jupyter~=1.0
 jupyterlab~=3.0
-kedro[pandas.JSONDataSet, pandas.ParquetDataSet]==0.18.0
+kedro[pandas.JSONDataSet, pandas.ParquetDataSet, matplotlib.MatplotlibWriter]==0.18.0
 kedro-viz~=4.0
 nbstripout~=0.4
 nltk~=3.7

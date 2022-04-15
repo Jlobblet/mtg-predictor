@@ -70,6 +70,9 @@ def process_atomic_cards(atomic_cards: pd.DataFrame) -> pd.DataFrame:
         .apply(lambda x: [stemmer.stem(word) for word in x if word not in stop_words])
     )
 
+    # Remove cards with no text
+    atomic_cards = atomic_cards[atomic_cards["word_counts"].notna()]
+
     # Filter to monocolour or colourless cards cards
     atomic_cards["colorIdentity"] = atomic_cards["colorIdentity"].apply(
         lambda c: c or "C"
@@ -102,13 +105,4 @@ def process_atomic_cards(atomic_cards: pd.DataFrame) -> pd.DataFrame:
     # Remove cards with no matching type
     atomic_cards = atomic_cards[atomic_cards["type"].notna()]
 
-    # Count the number of occurrences of each word in the text column.
-    return (
-        atomic_cards.explode("word_counts")
-        .groupby(by=["name", "colorIdentity", "manaValue", "type"])["word_counts"]
-        .value_counts()
-        .rename("count")
-        .reset_index()
-        .rename(columns={"word_counts": "word"})
-        .pipe(_inspect)
-    )
+    return atomic_cards

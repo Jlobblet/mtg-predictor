@@ -20,34 +20,66 @@ atomic_cards:
     type: pandas.ParquetDataSet
     filepath: data/03_primary/atomic_cards.parquet
 
-vectoriser:
+colorIdentity.vectoriser:
     type: pickle.PickleDataSet
-    filepath: data/05_model_input/vectoriser.pickle
+    filepath: data/05_model_input/colorIdentity/vectoriser.pickle
 
-selector:
+colorIdentity.selector:
     type: pickle.PickleDataSet
-    filepath: data/05_model_input/selector.pickle
+    filepath: data/05_model_input/colorIdentity/selector.pickle
 
-classifier:
+colorIdentity.classifier:
     type: pickle.PickleDataSet
-    filepath: data/05_model_input/classifier.pickle
+    filepath: data/05_model_input/colorIdentity/classifier.pickle
 
-pipeline:
+colorIdentity.pipeline:
     type: pickle.PickleDataSet
-    filepath: data/05_model_input/pipeline.pickle
+    filepath: data/05_model_input/colorIdentity/pipeline.pickle
 
-pipeline_fitted:
+colorIdentity.pipeline_fitted:
     type: pickle.PickleDataSet
-    filepath: data/06_models/pipeline_fitted.pickle
+    filepath: data/06_models/colorIdentity/pipeline_fitted.pickle
 
-predictions:
+colorIdentity.predictions:
     type: pandas.CSVDataSet
-    filepath: data/07_model_output/predictions.csv
+    filepath: data/07_model_output/colorIdentity/predictions.csv
     load_args:
         index_col: 0
     save_args:
         index: True
 
-confusion_matrix_display:
+colorIdentity.confusion_matrix_display:
     type: matplotlib.MatplotlibWriter
-    filepath: data/08_reporting/confusion_matrix_display.png
+    filepath: data/08_reporting/colorIdentity/confusion_matrix_display.png
+
+type.vectoriser:
+    type: pickle.PickleDataSet
+    filepath: data/05_model_input/type/vectoriser.pickle
+
+type.selector:
+    type: pickle.PickleDataSet
+    filepath: data/05_model_input/type/selector.pickle
+
+type.classifier:
+    type: pickle.PickleDataSet
+    filepath: data/05_model_input/type/classifier.pickle
+
+type.pipeline:
+    type: pickle.PickleDataSet
+    filepath: data/05_model_input/type/pipeline.pickle
+
+type.pipeline_fitted:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/type/pipeline_fitted.pickle
+
+type.predictions:
+    type: pandas.CSVDataSet
+    filepath: data/07_model_output/type/predictions.csv
+    load_args:
+        index_col: 0
+    save_args:
+        index: True
+
+type.confusion_matrix_display:
+    type: matplotlib.MatplotlibWriter
+    filepath: data/08_reporting/type/confusion_matrix_display.png

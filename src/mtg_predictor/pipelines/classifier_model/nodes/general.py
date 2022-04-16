@@ -9,7 +9,11 @@ from sklearn.base import ClassifierMixin
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import SelectKBest, chi2
-from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    classification_report,
+    confusion_matrix,
+)
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.utils.multiclass import unique_labels
@@ -61,7 +65,9 @@ def evaluate_model(prediction: pd.Series, X_test: pd.Series, y_test: pd.Series):
 
     logging.info(f"Prediction results:\n{df}")
 
-    logging.info(f"Classification report:\n{classification_report(y_test, prediction, labels=labels)}")
+    logging.info(
+        f"Classification report:\n{classification_report(y_test, prediction, labels=labels)}"
+    )
 
     cm = confusion_matrix(y_test, prediction, normalize="true", labels=labels)
     logging.info(f"Confusion matrix:\n{cm}")

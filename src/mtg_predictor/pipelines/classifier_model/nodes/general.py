@@ -1,12 +1,9 @@
 import logging
-from collections import Counter
-from importlib import import_module
-from typing import List, Tuple
+from typing import Tuple
 
-import numpy as np
 import pandas as pd
-from sklearn.base import ClassifierMixin
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.base import TransformerMixin
+from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.metrics import (
@@ -17,6 +14,15 @@ from sklearn.metrics import (
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.utils.multiclass import unique_labels
+
+
+class DenseTransformer(TransformerMixin):
+
+    def fit(self, X, y=None, **fit_params):
+        return self
+
+    def transform(self, X, y=None, **fit_params):
+        return X.todense()
 
 
 def test_train_split(
@@ -39,13 +45,13 @@ def make_selector(params: dict) -> SelectKBest:
     return SelectKBest(chi2, **params)
 
 
-def make_classifier(params: dict) -> RandomForestClassifier:
-    return RandomForestClassifier(**params)
+def make_classifier(params: dict) -> HistGradientBoostingClassifier:
+    return HistGradientBoostingClassifier(**params)
 
 
 def make_pipeline(vectoriser, selector, classifier) -> Pipeline:
     return Pipeline(
-        [("vectoriser", vectoriser), ("selector", selector), ("classifier", classifier)]
+        [("vectoriser", vectoriser), ("selector", selector), ("to_dense", DenseTransformer()), ("classifier", classifier)]
     )
 
 

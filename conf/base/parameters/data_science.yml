@@ -17,10 +17,6 @@ colorIdentity:
     k: 1000
 
   classifier:
-    n_estimators: 500
-    max_features: sqrt
-    min_samples_split: 2
-    n_jobs: -1
     random_state: 621
 
 type:
@@ -37,8 +33,4 @@ type:
     k: 1000
 
   classifier:
-    n_estimators: 500
-    max_features: sqrt
-    min_samples_split: 2
-    n_jobs: -1
     random_state: 621
